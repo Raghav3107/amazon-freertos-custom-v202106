@@ -75,7 +75,7 @@
 #endif
 
 /*added this headers */
-// #include "demoRunner.h"
+#include "demoRunner.h"
 
 /* Logging Task Defines. */
 #define mainLOGGING_MESSAGE_QUEUE_LENGTH    ( 32 )
@@ -160,7 +160,7 @@ int app_main( void )
         #endif /* if BLE_ENABLED */
         /* Run all demos. */
         //DEMO_RUNNER_RunDemos(); 
-        runDemoTaskCustom();
+        runMyProgram();
 
     }
 

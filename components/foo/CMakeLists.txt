@@ -5,14 +5,12 @@ set(srcs "src/demoRunner.c")
 
 
 idf_component_register(SRCS "${srcs}"
-                        INCLUDE_DIRS 
-                            "include")
+                        INCLUDE_DIRS "include")
 # standard CMake function can be used to specify dependencies. ${COMPONENT_TARGET} is defined
 # from esp-idf when you call register_component, by default it's idf_component_<folder_name>.
-target_link_libraries(${COMPONENT_TARGET} 
-                            PRIVATE 
-                            AFR::demo_core_mqtt
-                            AFR::common_io
-                            AFR::demo_core_mqtt_agent
-                            #idf::foo
-                            )
+target_link_libraries(
+                        ${COMPONENT_TARGET} 
+                        PRIVATE 
+                        AFR::demo_core_mqtt
+                        AFR::common_io
+                        )

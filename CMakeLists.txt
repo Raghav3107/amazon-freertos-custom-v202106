@@ -17,11 +17,16 @@ project(freertos_examples)
 
 # Tell IDF build to link against this target.
 set(IDF_PROJECT_EXECUTABLE afr_demo)
+
+set(mainsrcs 
+        "src/main.c"
+        "src/demoRunner.c")
 get_filename_component(
     IDF_EXECUTABLE_SRCS
-    "src/main.c" ABSOLUTE
+    "${mainsrcs}" ABSOLUTE
     )
 
+include_directories(afr_demo PRIVATE src/include)
 # Add some extra components. IDF_EXTRA_COMPONENT_DIRS is an variable used by ESP-IDF
 # to collect extra components.
 get_filename_component(
