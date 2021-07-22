@@ -75,14 +75,14 @@
 #endif
 
 /*added this headers */
-#include "demoRunner.h"
+// #include "demoRunner.h"
 
 /* Logging Task Defines. */
 #define mainLOGGING_MESSAGE_QUEUE_LENGTH    ( 32 )
 #define mainLOGGING_TASK_STACK_SIZE         ( configMINIMAL_STACK_SIZE * 4 )
 #define mainDEVICE_NICK_NAME                "Espressif_Demo"
 
-extern void runDemoTaskCustom(void);
+// extern void runDemoTaskCustom(void);
 
 /* Static arrays for FreeRTOS+TCP stack initialization for Ethernet network connections
  * are use are below. If you are using an Ethernet connection on your MCU device it is

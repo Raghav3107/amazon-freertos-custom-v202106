@@ -14,10 +14,11 @@ afr_module_cmake_files(${AFR_CURRENT_MODULE}
 afr_module_sources(
     ${AFR_CURRENT_MODULE}
     INTERFACE
-        # "${CMAKE_CURRENT_LIST_DIR}/mqtt_agent_task.c"
-        # "${CMAKE_CURRENT_LIST_DIR}/simple_sub_pub_demo.c"
-        # "${CMAKE_CURRENT_LIST_DIR}/subscription_manager.c"
-        # "${CMAKE_CURRENT_LIST_DIR}/subscription_manager.h"
+        "${CMAKE_CURRENT_LIST_DIR}/mqtt_agent_task.c"
+        "${CMAKE_CURRENT_LIST_DIR}/simple_sub_pub_demo.c"
+        "${CMAKE_CURRENT_LIST_DIR}/shadow_task.c"
+        "${CMAKE_CURRENT_LIST_DIR}/subscription_manager.c"
+        "${CMAKE_CURRENT_LIST_DIR}/subscription_manager.h"
         #"/home/horsemann/Desktop/WorkSpace/aws_latest_repository/amazon-freertos-examples/src"
         # Add the header file added to the target's metadata so that it
         # is available in code downloaded from the FreeRTOS console.
@@ -41,6 +42,13 @@ afr_module_dependencies(
         AFR::transport_interface_secure_sockets
         AFR::secure_sockets
         AFR::pkcs11_helpers
+        AFR::mqtt_demo_helpers
+        AFR::core_json
+        AFR::device_shadow
+        # Add dependency on the device_shadow_demo_dependencies 
+        # metadata module so that this demo is only shown when the
+        # Device Shadow library is selected on the FreeRTOS console.
+        AFR::device_shadow_demo_dependencies
         # Add dependency on the core_mqtt_agent_demo_dependencies metadata module
         # so that FreeRTOS console shows this demo ONLY when the core MQTT Agent
         # (or another library depending on coreMQTT Agent) is selected on the console.

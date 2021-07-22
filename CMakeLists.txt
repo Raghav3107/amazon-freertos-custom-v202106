@@ -6,6 +6,7 @@ include(${esp_idf_dir}/tools/cmake/idf.cmake)
 
 string(FIND "${CMAKE_TOOLCHAIN_FILE}" "esp32s2" SOC_TOOLCHAIN_ESP32S2)
 string(FIND "${CMAKE_TOOLCHAIN_FILE}" "esp32" SOC_TOOLCHAIN_ESP32)
+
 if (NOT(${SOC_TOOLCHAIN_ESP32S2} EQUAL -1))
     set(SOC_NAME "esp32s2")
 elseif(NOT($SOC_TOOLCHAIN_ESP32) EQUAL -1)
@@ -14,17 +15,20 @@ endif()
 
 project(freertos_examples)
 
-file(GLOB SOURCES "src/*.c")
-add_executable(afr_demo ${SOURCES})
+# Tell IDF build to link against this target.
+set(IDF_PROJECT_EXECUTABLE afr_demo)
+get_filename_component(
+    IDF_EXECUTABLE_SRCS
+    "src/main.c" ABSOLUTE
+    )
 
-include_directories(afr_demo PRIVATE src/include)
-
-list(APPEND IDF_EXTRA_COMPONENT_DIRS ${EXTRA_COMPONENT_DIRS})
+# Add some extra components. IDF_EXTRA_COMPONENT_DIRS is an variable used by ESP-IDF
+# to collect extra components.
 get_filename_component(
     EXTRA_COMPONENT_DIRS
-    "components" ABSOLUTE
+    "components/foo" ABSOLUTE
 )
-list(APPEND IDF_EXTRA_COMPONENT_DIRS ${EXTRA_COMPONENT_DIRS})
+idf_build_component(${EXTRA_COMPONENT_DIRS})
 
 # As of now there's no official way to redefine config files outside of the FreeRTOS source tree.
 # This is a temporary approach to inject an include path so that this takes precedence over the
@@ -48,10 +52,5 @@ target_link_libraries(
     AFR::common_io
     AFR::demo_device_shadow
     AFR::demo_core_mqtt_agent
-    AFR::ble
     AFR::demo_gatt_server
-    idf::esp_wifi
-    idf::bt
-    idf:esp32
-  
 )
