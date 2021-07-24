@@ -64,7 +64,6 @@
 /* Subscription manager header include. */
 #include "subscription_manager.h"
 
-#include "printmessage.h"
 /**
  * democonfigCLIENT_IDENTIFIER is required. Throw compilation error if it is not defined.
  */
@@ -1131,8 +1130,6 @@ void vShadowTask(void *pvParameters)
     LogInfo(("============================== \n"));
     LogInfo(("Starting Shadow Demo Task\n"));
     LogInfo(("============================== \n"));
-
-    printMyMessage();
 
     /* Remove compiler warnings about unused parameters. */
     (void)pvParameters;
