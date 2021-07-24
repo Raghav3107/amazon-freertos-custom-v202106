@@ -1,4 +1,4 @@
-# amazon-freertos-custom-v20210
+# amazon-freertos-custom-v202107
 ## Introduction
 * Shadow, MQTT and OTA tested together.
 * Used coreMQTT-Agent for mqtt connection sharing.
