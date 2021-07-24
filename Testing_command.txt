@@ -1,7 +1,33 @@
 
 
+#Toolchain configuration using default partition table and sdkconfig.default
 cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=freertos/tools/cmake/toolchains/xtensa-esp32.cmake -GNinja
+
+#-------------------------------------------------------------------------------------------------------------
+
+
+#Toolchian configuration using custom partition table and sdkconfig.default or sdkconfig
 
 cmake -S . -B build -DIDF_SDKCONFIG_DEFAULTS=./sdkconfig.defaults -DCMAKE_TOOLCHAIN_FILE=freertos/tools/cmake/toolchains/xtensa-esp32.cmake -GNinja
 
-cmake -
+# cleaning the build directory 
+
+cmake --build build --target clean
+
+# OR clean first the build
+
+cmake --build build --clean-first -j4
+
+# build the project
+
+cmake --build build --paralllel 4
+
+# flashing the  project
+
+cmake --build build --target flash -j4
+
+#monitor device 
+
+idf.py monitor
+
+
