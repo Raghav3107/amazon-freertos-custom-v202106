@@ -74,13 +74,13 @@ pip install --user -r amazon-freertos/vendors/espressif/esp-idf/requirements.txt
 ```shell script
 cmake -S . -B build -DIDF_SDKCONFIG_DEFAULTS=./sdkconfig -DCMAKE_TOOLCHAIN_FILE=amazon-freertos/tools/cmake/toolchains/xtensa-esp32.cmake -GNinja
 
-cmake --build build -j4
+cmake --build build --j4
 ```
 
 ### Flash code
 
 ```shell script
-cmake --build build –target flash -j4
+cmake --build build --target flash -j4
 ```
  
 ### Monitoring
