@@ -117,9 +117,16 @@
 /**
  * @brief The number of simple subscribe-publish tasks to create for the demo
  */
-#define democonfigNUM_SIMPLE_SUB_PUB_TASKS_TO_CREATE       1
-#define democonfigSIMPLE_SUB_PUB_TASK_STACK_SIZE           ( configMINIMAL_STACK_SIZE * 4 )
+#define democonfigNUM_SIMPLE_SUB_PUB_TASKS_TO_CREATE        1
+#define democonfigSIMPLE_SUB_PUB_TASK_STACK_SIZE            ( configMINIMAL_STACK_SIZE * 4 )
+//#define MQTT_AGENT_NETWORK_BUFFER_SIZE                      ( 5000 )
 
+
+#define democonfigRUN_SHADOW_TASK                           1
+#define democonfigRUN_SHADOW_TASK_STACK_SIZE                ( configMINIMAL_STACK_SIZE * 4 )
+
+#define democonfigRUN_OTA_TASK                              1
+#define democonfigRUN_OTA_TASK_STACK_SIZE                   ( configMINIMAL_STACK_SIZE * 4 )
 
 /**
  * @brief The maximum number of times to run the demo's task creation loop.

@@ -15,7 +15,6 @@
  * broker - checking that the received data matches the transmitted data
  * exactly.
  */
-
 /* Standard includes. */
 #include <string.h>
 #include <stdio.h>
@@ -24,7 +23,9 @@
 /* Kernel includes. */
 #include "FreeRTOS.h"
 #include "task.h"
-#include "queue.h"
+
+/* Demo Specific configs. */
+#include "mqtt_agent_demo_config.h"
 
 /* MQTT library includes. */
 #include "core_mqtt.h"
@@ -35,10 +36,8 @@
 /* Subscription manager header include. */
 #include "subscription_manager.h"
 
-/* custom Demo Runner Configuration. */
-#include "demoRunnerConfig.h"
 
-/**
+/* 
  * @brief This demo uses task notifications to signal tasks from MQTT callback
  * functions.  MQTT_LARGE_MSG_MS_TO_WAIT_FOR_NOTIFICATION defines the time, in ticks,
  * to wait for such a callback.
@@ -62,6 +61,7 @@
  * MQTT message serialization, leaving a little room for the MQTT protocol
  * headers themselves.
  */
+#define MQTT_AGENT_NETWORK_BUFFER_SIZE                      ( 5000 )
 #define MQTT_LARGE_MSG_PROTOCOL_OVERHEAD (50)
 #define MQTT_LARGE_MSG_MAX_PAYLOAD_LENGTH (MQTT_AGENT_NETWORK_BUFFER_SIZE - MQTT_LARGE_MSG_PROTOCOL_OVERHEAD)
 
@@ -86,7 +86,7 @@ typedef struct
 
 PublishDataInfo_t xPublishDataInfo;
 
-/**< It allow to publish the payload as soon the payload is created*/
+/* It allow to publish the payload as soon the payload is created*/
 bool bTriggerPublish = false;
 /**
  * @brief Passed into MQTTAgent_Subscribe() as the callback to execute when the
@@ -162,7 +162,7 @@ static void prvSubscribeToTopic();
 /**
  * @brief The function that implements the task demonstrated by this file.
  */
-void prvLargeMessageSubscribePublishTask(void *pvParameters);
+void vMqttPubSubTask(void *pvParameters);
 
 /*-----------------------------------------------------------*/
 
@@ -260,7 +260,7 @@ void prvCreateMQTTPayload(char *pcBuffer,
 {
     strcpy(xPublishDataInfo.pcPublishMsgBuffer, pcBuffer);
     xPublishDataInfo.uBufferLength = xBufferSize;
-    printf("Publish Data: %s Length:%u \n", xPublishDataInfo.pcPublishMsgBuffer, xPublishDataInfo.uBufferLength);
+    printf("Publish Data: %s Lngth:%u \n", xPublishDataInfo.pcPublishMsgBuffer, xPublishDataInfo.uBufferLength);
     bTriggerPublish = true;
 }
 
@@ -329,9 +329,11 @@ static void prvSubscribeToTopic()
 
 /*-----------------------------------------------------------*/
 
-void MQTT_Pub_Sub_Task(void *pvParameters)
+void vMqttPubSubTask(void *pvParameters)
 {
-
+    LogInfo(("============================== \n"));
+    LogInfo(("Starting MQTT Pub Sub Task \n"));
+    LogInfo(("============================== \n"));
     uint32_t ulLargeMessageFailures = 0;
     MQTTPublishInfo_t xPublishInfo = {0};
     MQTTStatus_t xCommandAdded;

@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.13)
 
+
+# Disable in-source build.
+if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
+    message(FATAL_ERROR "In-source build is not allowed, please use a separate build folder.")
+endif()
+
 set(esp_idf_dir "${CMAKE_CURRENT_LIST_DIR}/freertos/vendors/espressif/esp-idf")
 
 include(${esp_idf_dir}/tools/cmake/idf.cmake)
@@ -15,18 +21,17 @@ endif()
 
 project(freertos_examples)
 
-# Tell IDF build to link against this target.
-set(IDF_PROJECT_EXECUTABLE afr_demo)
-
-set(mainsrcs 
-        "src/main.c"
-        "src/demoRunner.c")
+file(GLOB SOURCES "src/*.c")
 get_filename_component(
     IDF_EXECUTABLE_SRCS
-    "${mainsrcs}" ABSOLUTE
+    "${SOURCES}" ABSOLUTE
     )
 
 include_directories(afr_demo PRIVATE src/include)
+# Tell IDF build to link against this target.
+set(IDF_PROJECT_EXECUTABLE afr_demo)
+
+
 # Add some extra components. IDF_EXTRA_COMPONENT_DIRS is an variable used by ESP-IDF
 # to collect extra components.
 get_filename_component(
@@ -55,7 +60,9 @@ target_link_libraries(
     PRIVATE
     AFR::demo_core_mqtt
     AFR::common_io
-    AFR::demo_device_shadow
+    AFR::demo_numeric_comparison
     AFR::demo_core_mqtt_agent
     AFR::demo_gatt_server
+    AFR::demo_ota_core_mqtt
+    AFR::demo_device_shadow
 )

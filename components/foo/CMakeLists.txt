@@ -1,7 +1,7 @@
 # Use idf_component_register to add this component, this will define a CMake library target.
 # Specify component sources in SRCS.
 # Specify component include directories in INCLUDE_DIRS.
-set(srcs "src/demoRunner.c")
+set(srcs "src/foo.c")
 
 
 idf_component_register(SRCS "${srcs}"

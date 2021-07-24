@@ -74,15 +74,11 @@
     #include "iot_ble_numericComparison.h"
 #endif
 
-/*added this headers */
-#include "demoRunner.h"
-
 /* Logging Task Defines. */
 #define mainLOGGING_MESSAGE_QUEUE_LENGTH    ( 32 )
 #define mainLOGGING_TASK_STACK_SIZE         ( configMINIMAL_STACK_SIZE * 4 )
 #define mainDEVICE_NICK_NAME                "Espressif_Demo"
 
-// extern void runDemoTaskCustom(void);
 
 /* Static arrays for FreeRTOS+TCP stack initialization for Ethernet network connections
  * are use are below. If you are using an Ethernet connection on your MCU device it is
@@ -159,9 +155,7 @@ int app_main( void )
             ESP_ERROR_CHECK( esp_bt_controller_mem_release( ESP_BT_MODE_BLE ) );
         #endif /* if BLE_ENABLED */
         /* Run all demos. */
-        //DEMO_RUNNER_RunDemos(); 
-        runMyProgram();
-
+        DEMO_RUNNER_RunDemos();
     }
 
     /* Start the scheduler.  Initialization that requires the OS to be running,

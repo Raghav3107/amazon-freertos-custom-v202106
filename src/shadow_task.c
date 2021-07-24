@@ -24,39 +24,47 @@
  * 7. Repeat from step 4.
  */
 
+
 /* Standard includes. */
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 
 /* Demo Specific configs. */
 #include "shadow_demo_config.h"
+
+#include "aws_demo.h"
 
 /* Kernel includes. */
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
+/* SHADOW API header. */
+#include "shadow.h"
+
+/* JSON library includes. */
+#include "core_json.h"
+
+/* shadow demo helpers header. */
+#include "mqtt_demo_helpers.h"
+
+/* Transport interface implementation include header for TLS. */
+#include "transport_secure_sockets.h"
+
+
+/* Demo Specific configs. */
+#include "mqtt_agent_demo_config.h"
 
 /* MQTT library includes. */
+#include "core_mqtt.h"
+
+/* MQTT agent include. */
 #include "core_mqtt_agent.h"
 
 /* Subscription manager header include. */
 #include "subscription_manager.h"
 
-/* shadow demo helpers header. */
-#include "mqtt_demo_helpers.h"
-
-/* JSON library includes. */
-#include "core_json.h"
-
-/* Shadow API header. */
-#include "shadow.h"
-
-/* custom Demo Runner Configuration. */
-#include "demoRunnerConfig.h"
-
-
+#include "printmessage.h"
 /**
  * democonfigCLIENT_IDENTIFIER is required. Throw compilation error if it is not defined.
  */
@@ -213,6 +221,12 @@ struct MQTTAgentCommandContext
     MQTTStatus_t xReturnStatus;
 };
 
+// extern MQTTAgentContext_t xGlobalMqttAgentContext;
+
+/**
+ * @brief The MQTT agent manages the MQTT contexts.  This set the handle to the
+ * context used by this demo.
+ */
 extern MQTTAgentContext_t xGlobalMqttAgentContext;
 
 /**
@@ -1114,7 +1128,11 @@ static void prvIncomingPublishUpdateRejectedCallback(void *pxSubscriptionContext
 
 void vShadowTask(void *pvParameters)
 {
-    printf(("vShadowTask................\n"));
+    LogInfo(("============================== \n"));
+    LogInfo(("Starting Shadow Demo Task\n"));
+    LogInfo(("============================== \n"));
+
+    printMyMessage();
 
     /* Remove compiler warnings about unused parameters. */
     (void)pvParameters;
@@ -1354,8 +1372,8 @@ void vShadowTask(void *pvParameters)
             /* The following line is only needed for winsim. Due to an inaccurate tick rate, the connection
             * times out as the keepalive packets are not sent at the expected interval.
             */
-            MQTTAgent_Ping(&xGlobalMqttAgentContext,
-                           &xCommandParams);
+            // MQTTAgent_Ping(&xGlobalMqttAgentContext,
+            //                &xCommandParams);
 
             LogDebug(("Sleeping until next update check."));
             vTaskDelay(pdMS_TO_TICKS(DELAY_BETWEEN_DEMO_ITERATIONS_TICKS));

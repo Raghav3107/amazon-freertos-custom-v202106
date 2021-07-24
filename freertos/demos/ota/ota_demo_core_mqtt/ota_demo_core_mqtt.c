@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2020 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
+ * FreeRTOS V202107.00
+ * Copyright (C) 2021 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -810,6 +811,7 @@ static OtaTopicFilterCallback_t xOtaTopicFilterCallbacks[] =
 
 static void prvOtaEventBufferFree( OtaEventData_t * const pxBuffer )
 {
+    printf("prvOtaEventBufferFree......... %d \n", __LINE__);
     if( xSemaphoreTake( xBufferSemaphore, portMAX_DELAY ) == pdTRUE )
     {
         pxBuffer->bufferUsed = false;
@@ -825,6 +827,7 @@ static void prvOtaEventBufferFree( OtaEventData_t * const pxBuffer )
 
 static OtaEventData_t * prvOtaEventBufferGet( void )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     uint32_t ulIndex = 0;
     OtaEventData_t * pxFreeBuffer = NULL;
 
@@ -854,6 +857,7 @@ static OtaEventData_t * prvOtaEventBufferGet( void )
 static void prvOtaAppCallback( OtaJobEvent_t xEvent,
                                const void * pData )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     OtaErr_t xOtaError = OtaErrUninitialized;
 
     switch( xEvent )
@@ -939,6 +943,7 @@ static void prvIncomingPublishCallback( MQTTAgentContext_t * pxMqttAgentContext,
                                         uint16_t usPacketId,
                                         MQTTPublishInfo_t * pxPublishInfo )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     bool xPublishHandled = false;
     char cOriginalChar, * pcLocation;
 
@@ -967,6 +972,7 @@ static void prvIncomingPublishCallback( MQTTAgentContext_t * pxMqttAgentContext,
 static void prvMqttJobCallback( void * pvIncomingPublishCallbackContext,
                                 MQTTPublishInfo_t * pxPublishInfo )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     OtaEventData_t * pxEventData;
     OtaEventMsg_t pxEventMsg = { 0 };
 
@@ -998,6 +1004,7 @@ static void prvMqttJobCallback( void * pvIncomingPublishCallbackContext,
 static void prvMqttDefaultCallback( void * pvIncomingPublishCallbackContext,
                                     MQTTPublishInfo_t * pxPublishInfo )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     bool xIsMatch = false;
 
     ( void ) MQTT_MatchTopic( pxPublishInfo->pTopicName,
@@ -1017,6 +1024,7 @@ static void prvMqttDefaultCallback( void * pvIncomingPublishCallbackContext,
 static void prvMqttDataCallback( void * pvIncomingPublishCallbackContext,
                                  MQTTPublishInfo_t * pxPublishInfo )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     OtaEventData_t * pxEventData;
     OtaEventMsg_t pxEventMsg = { 0 };
 
@@ -1048,6 +1056,7 @@ static void prvMqttDataCallback( void * pvIncomingPublishCallbackContext,
 static void prvMQTTAgentCmdCompleteCallback( MQTTAgentCommandContext_t * pxCommandContext,
                                              MQTTAgentReturnInfo_t * pxReturnInfo )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     /* Store the result in the application defined context so the task that
      * initiated the publish can check the operation's status. */
     pxCommandContext->xReturnStatus = pxReturnInfo->returnCode;
@@ -1108,6 +1117,7 @@ static void prvRegisterOTACallback( const char * pcTopicFilter,
 static void prvMQTTSubscribeCompleteCallback( MQTTAgentCommandContext_t * pxCommandContext,
                                               MQTTAgentReturnInfo_t * pxReturnInfo )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     MQTTAgentSubscribeArgs_t * pxSubscribeArgs;
 
     if( pxReturnInfo->returnCode == MQTTSuccess )
@@ -1170,6 +1180,7 @@ static void prvMQTTUnsubscribeCompleteCallback( MQTTAgentCommandContext_t * pxCo
 
 static BaseType_t prvBackoffForRetry( BackoffAlgorithmContext_t * pxRetryParams )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     BaseType_t xReturnStatus = pdFAIL;
     uint16_t usNextRetryBackOff = 0U;
     BackoffAlgorithmStatus_t xBackoffAlgStatus = BackoffAlgorithmSuccess;
@@ -1219,6 +1230,7 @@ static BaseType_t prvBackoffForRetry( BackoffAlgorithmContext_t * pxRetryParams 
 
 static uint32_t prvGetTimeMs( void )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     TickType_t xTickCount = 0;
     uint32_t ulTimeMs = 0UL;
 
@@ -1238,6 +1250,7 @@ static uint32_t prvGetTimeMs( void )
 
 static MQTTStatus_t prvMqttAgentInit( void )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     TransportInterface_t xTransport;
     MQTTStatus_t xReturn;
     MQTTFixedBuffer_t xFixedBuffer = { .pBuffer = pucNetworkBuffer, .size = MQTT_AGENT_NETWORK_BUFFER_SIZE };
@@ -1281,6 +1294,7 @@ static MQTTStatus_t prvMqttAgentInit( void )
 
 static BaseType_t prvCreateSocketConnectionToMQTTBroker( NetworkContext_t * pxNetworkContext )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     ServerInfo_t xServerInfo = { 0 };
     SocketsConfig_t xSocketsConfig = { 0 };
     BaseType_t xStatus = pdPASS;
@@ -1338,6 +1352,7 @@ static BaseType_t prvCreateSocketConnectionToMQTTBroker( NetworkContext_t * pxNe
 
 static MQTTStatus_t prvMQTTConnect( void )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     MQTTStatus_t xMqttStatus = MQTTBadParameter;
     MQTTConnectInfo_t xConnectInfo = { 0 };
 
@@ -1374,6 +1389,7 @@ static MQTTStatus_t prvMQTTConnect( void )
 
 static BaseType_t prvConnectToMQTTBroker( void )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     BaseType_t xStatus = pdFAIL;
 
     xNetworkContextMqtt.pParams = &xSecureSocketsTransportParams;
@@ -1425,6 +1441,7 @@ static BaseType_t prvConnectToMQTTBroker( void )
 
 static void prvDisconnectFromMQTTBroker( void )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     MQTTAgentCommandContext_t xCommandContext = { 0 };
     MQTTAgentCommandInfo_t xCommandParams = { 0 };
     MQTTStatus_t xCommandStatus;
@@ -1457,6 +1474,7 @@ static OtaMqttStatus_t prvMqttSubscribe( const char * pcTopicFilter,
                                          uint16_t usTopicFilterLength,
                                          uint8_t ucQOS )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     OtaMqttStatus_t xOtaMqttStatus = OtaMqttSuccess;
     MQTTStatus_t xCommandStatus;
     MQTTAgentCommandInfo_t xCommandParams = { 0 };
@@ -1513,6 +1531,7 @@ static OtaMqttStatus_t prvMqttPublish( const char * const pcTopic,
                                        uint32_t ulMsgSize,
                                        uint8_t ucQOS )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     OtaMqttStatus_t xOtaMqttStatus = OtaMqttSuccess;
     MQTTStatus_t xCommandStatus;
     MQTTAgentCommandInfo_t xCommandParams = { 0 };
@@ -1561,6 +1580,7 @@ static OtaMqttStatus_t prvMqttUnSubscribe( const char * pcTopicFilter,
                                            uint16_t usTopicFilterLength,
                                            uint8_t ucQOS )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     OtaMqttStatus_t xOtaMqttStatus = OtaMqttSuccess;
     MQTTStatus_t xCommandStatus;
     MQTTAgentCommandInfo_t xCommandParams = { 0 };
@@ -1609,6 +1629,7 @@ static OtaMqttStatus_t prvMqttUnSubscribe( const char * pcTopicFilter,
 
 static void prvSetOtaInterfaces( OtaInterfaces_t * pxOtaInterfaces )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     /* Initialize OTA library OS Interface. */
     pxOtaInterfaces->os.event.init = OtaInitEvent_FreeRTOS;
     pxOtaInterfaces->os.event.send = OtaSendEvent_FreeRTOS;
@@ -1649,6 +1670,7 @@ static void prvOTAAgentTask( void * pParam )
 
 static void prvMQTTAgentTask( void * pParam )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     BaseType_t xResult = pdFAIL;
     MQTTStatus_t xMQTTStatus = MQTTSuccess;
 
@@ -1694,6 +1716,7 @@ static void prvMQTTAgentTask( void * pParam )
 
 static BaseType_t prvSuspendOTA( void )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     /* OTA library return status. */
     OtaErr_t xOtaError = OtaErrUninitialized;
     BaseType_t xStatus = pdFAIL;
@@ -1732,6 +1755,7 @@ static BaseType_t prvSuspendOTA( void )
 
 static BaseType_t prvResumeOTA( void )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     /* OTA library return status. */
     OtaErr_t xOtaError = OtaErrUninitialized;
     BaseType_t xStatus = pdFAIL;
@@ -1770,6 +1794,7 @@ static BaseType_t prvResumeOTA( void )
 
 static BaseType_t prvRunOTADemo( void )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     /* Status indicating a successful demo or not. */
     BaseType_t xStatus = pdFAIL;
 
@@ -1887,6 +1912,7 @@ int RunOtaCoreMqttDemo( bool xAwsIotMqttMode,
                         void * pNetworkCredentialInfo,
                         const IotNetworkInterface_t * pxNetworkInterface )
 {
+    printf(".........%s::%d \n",__func__ ,__LINE__);
     ( void ) xAwsIotMqttMode;
     ( void ) pIdentifier;
     ( void ) pNetworkServerInfo;
@@ -1958,6 +1984,7 @@ int RunOtaCoreMqttDemo( bool xAwsIotMqttMode,
         {
             xDemoStatus = pdFAIL;
         }
+        printf(".........%s::%d \n",__func__ ,__LINE__);
     }
 
     /****************************** Cleanup ******************************/
